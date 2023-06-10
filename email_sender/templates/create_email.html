@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <title>Email Sender</title>
+
+<!-- Подключение стилей Bootstrap 4 -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+
+  </head>
+  <body>
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createEmailModal">
+    Создать рассылку
+</button>
+
+<!-- Модальное окно для создания рассылки -->
+<div class="modal fade" id="createEmailModal" tabindex="-1" role="dialog" aria-labelledby="createEmailModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="createEmailForm" method="post" data-url="{% url 'create_email' %}">{% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createEmailModalLabel">Создать рассылку</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Форма для ввода данных рассылки -->
+                    {% csrf_token %}
+                    
+                    {{ form.as_p }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="submit" class="btn btn-primary">Создать</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+  </body>
+</html>
+
+
+<!-- Подключение скрипта jQuery 3.6.0 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Подключение скрипта jQuery UI 1.13.1 -->
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+
+<!-- Подключение скриптов Bootstrap 4 -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#createEmailForm').submit(function(e) {
+            e.preventDefault();
+            var form = $(this);
+            var url = form.data('url');
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: form.serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        // Обработка успешного создания рассылки
+                        alert('Рассылка успешно создана!');
+                        // $('#createEmailModal').modal('hide');
+                    } else {
+                        // Обработка ошибки при создании рассылки
+                        alert('Произошла ошибка при создании рассылки.');
+                    }
+                },
+                error: function() {
+                    // Обработка ошибки AJAX запроса
+                    alert('Произошла ошибка при отправке AJAX запроса.');
+                }
+            });
+        });
+    });
+</script>

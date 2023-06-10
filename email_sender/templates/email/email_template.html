@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Email Template</title>
+    <script>
+        window.onload = function() {
+            var trackingPixel = new Image();
+            trackingPixel.src = "{% url 'tracking_pixel_view' tracking_pixel_id=email_open.tracking_pixel_id %}";
+        };
+    </script>
+</head>
+<body>
+    <h1>{{ subject }}</h1>
+    <p>{{ body }}</p>
+    <p>Subscriber: {{ subscriber.first_name }}, {{subscriber.last_name}}, {{subscriber.birthday}}</p>
+</body>
+</html>
